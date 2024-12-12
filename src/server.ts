@@ -3,9 +3,9 @@ import fastifyJwt from "@fastify/jwt";
 import cors from "@fastify/cors";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
-import { authenticationRoutes } from "./routes/authentication";
-import { tablesRoutes } from "./routes/tables";
-import { reservationsRoutes } from "./routes/reservations";
+import { authenticationRoutes } from "./routes/authentication.routes";
+import { tablesRoutes } from "./routes/tables.routes";
+import { reservationsRoutes } from "./routes/reservations.routes";
 
 const app = fastify();
 
