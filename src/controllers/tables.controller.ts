@@ -2,7 +2,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import z from "zod";
 import { prisma } from "../lib/prisma";
 
-export async function listTable(req: FastifyRequest, res: FastifyReply) {
+export async function listTables(req: FastifyRequest, res: FastifyReply) {
   const tables = await prisma.table.findMany();
 
   return res.send({
@@ -53,6 +53,16 @@ export async function updateTable(req: FastifyRequest, res: FastifyReply) {
 
   const { id } = updateTableParamsSchema.parse(req.params);
   const { tableNumber, capacity, status } = updateTableBodySchema.parse(req.body);
+
+  const user = await prisma.user.findUniqueOrThrow({
+    where: {
+      id: Number(req.user.sub),
+    },
+  });
+
+  if (user.role != "admin") {
+    return res.status(403).send({ error: "User without permission" });
+  }
 
   const table = await prisma.table.findUnique({
     where: {
