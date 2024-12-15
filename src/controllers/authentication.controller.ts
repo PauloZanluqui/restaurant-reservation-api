@@ -37,7 +37,7 @@ export async function login(req: FastifyRequest, res: FastifyReply) {
     }
   );
 
-  return res.send({ token });
+  return res.send({ token, role: user.role });
 }
 
 export async function register(req: FastifyRequest, res: FastifyReply) {
