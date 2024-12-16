@@ -7,6 +7,16 @@ export async function listReservations(req: FastifyRequest, res: FastifyReply) {
     where: {
       userId: Number(req.user.sub),
     },
+    include: {
+      table: {
+        select: {
+          tableNumber: true,
+        },
+      },
+    },
+    orderBy: {
+      reservationDate: "asc",
+    },
   });
 
   return res.send({
@@ -69,6 +79,7 @@ export async function createReservation(req: FastifyRequest, res: FastifyReply) 
       userId: Number(req.user.sub),
       tableId: table.id,
       reservationDate: parsedReservationDate,
+      peopleQuantity: quantityPeople,
       status: "active",
     },
   });

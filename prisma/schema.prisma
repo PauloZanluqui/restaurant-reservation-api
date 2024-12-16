@@ -55,6 +55,7 @@ model Reservations {
   userId          Int               @map("user_id")
   tableId         Int               @map("table_id")
   reservationDate DateTime          @map("reservation_date")
+  peopleQuantity  Int               @map("people_quantity") @default(0)
   status          reservationStatus
 
   user  User  @relation(fields: [userId], references: [id])
