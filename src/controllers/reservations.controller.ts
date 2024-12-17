@@ -27,11 +27,11 @@ export async function listReservations(req: FastifyRequest, res: FastifyReply) {
 export async function createReservation(req: FastifyRequest, res: FastifyReply) {
   const updateReservationBodySchema = z.object({
     tableNumber: z.number().positive().optional(),
-    quantityPeople: z.number().positive(),
+    peopleQuantity: z.number().positive(),
     reservationDate: z.string(),
   });
 
-  const { tableNumber, quantityPeople, reservationDate } = updateReservationBodySchema.parse(req.body);
+  const { tableNumber, peopleQuantity, reservationDate } = updateReservationBodySchema.parse(req.body);
 
   // Converte a string de data para o tipo Date
   const parsedReservationDate = new Date(reservationDate);
@@ -50,7 +50,7 @@ export async function createReservation(req: FastifyRequest, res: FastifyReply) 
     return res.status(404).send({ error: "Table not found" });
   }
 
-  if (table.capacity < quantityPeople) {
+  if (table.capacity < peopleQuantity) {
     return res.status(400).send({ error: "Not enough capacity in the table" });
   }
 
@@ -79,12 +79,12 @@ export async function createReservation(req: FastifyRequest, res: FastifyReply) 
       userId: Number(req.user.sub),
       tableId: table.id,
       reservationDate: parsedReservationDate,
-      peopleQuantity: quantityPeople,
+      peopleQuantity,
       status: "active",
     },
   });
 
-  return res.send();
+  return res.status(201).send();
 }
 
 export async function cancelReservation(req: FastifyRequest, res: FastifyReply) {
