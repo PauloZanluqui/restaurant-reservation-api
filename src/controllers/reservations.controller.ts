@@ -3,9 +3,16 @@ import z from "zod";
 import { prisma } from "../lib/prisma";
 
 export async function listReservations(req: FastifyRequest, res: FastifyReply) {
+  const searchReservationsQuerySchema = z.object({
+    status: z.enum(["active", "canceled"]).optional(),
+  });
+
+  const { status } = searchReservationsQuerySchema.parse(req.query);
+
   const reservations = await prisma.reservations.findMany({
     where: {
       userId: Number(req.user.sub),
+      status: status? status : undefined,
     },
     include: {
       table: {
