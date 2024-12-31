@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { createTable, deleteTable, listTables, updateTable } from "../controllers/tables.controller";
+import { createTable, deleteTable, listTableId, listTables, updateTable } from "../controllers/tables.controller";
 
 export async function tablesRoutes(app: FastifyInstance) {
   app.addHook("onRequest", async (req, res) => {
@@ -11,6 +11,8 @@ export async function tablesRoutes(app: FastifyInstance) {
   });
 
   app.get("/tables", listTables);
+
+  app.get("/tables/:id", listTableId);
 
   app.post("/tables", createTable);
 

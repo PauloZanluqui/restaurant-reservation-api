@@ -3,10 +3,32 @@ import z from "zod";
 import { prisma } from "../lib/prisma";
 
 export async function listTables(req: FastifyRequest, res: FastifyReply) {
-  const tables = await prisma.table.findMany();
+  const tables = await prisma.table.findMany({
+    orderBy: {
+      tableNumber: "asc",
+    },
+  });
 
   return res.send({
     tables,
+  });
+}
+
+export async function listTableId(req: FastifyRequest, res: FastifyReply) {
+  const updateTableParamsSchema = z.object({
+    id: z.coerce.number(),
+  });
+
+  const { id } = updateTableParamsSchema.parse(req.params);
+
+  const table = await prisma.table.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  return res.send({
+    table,
   });
 }
 
